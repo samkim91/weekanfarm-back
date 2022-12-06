@@ -1,5 +1,5 @@
 import { Column, Entity, ManyToOne } from 'typeorm';
-import { FarmEntity } from '../farms/farm.entity';
+import { FarmEntity } from '../farms/entities/farm.entity';
 import { DayOfWeek } from '../enums/day.of.week';
 import { CommonEntity } from '../bases/common-entity';
 

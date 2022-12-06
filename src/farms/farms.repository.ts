@@ -1,5 +1,4 @@
-import { InjectRepository } from '@nestjs/typeorm';
-import { FarmEntity } from './farm.entity';
+import { FarmEntity } from './entities/farm.entity';
 import { Repository } from 'typeorm';
 import { Injectable } from '@nestjs/common';
 

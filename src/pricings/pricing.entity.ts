@@ -1,5 +1,5 @@
 import { Column, Entity, ManyToOne } from 'typeorm';
-import { FarmEntity } from '../farms/farm.entity';
+import { FarmEntity } from '../farms/entities/farm.entity';
 import { CommonEntity } from '../bases/common-entity';
 
 @Entity({ name: 'pricing' })

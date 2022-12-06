@@ -1,6 +1,6 @@
 import { Entity, OneToOne } from 'typeorm';
-import { ThemeEntity } from '../themes/theme.entity';
-import { AttachmentEntity } from '../bases/attachment-entity';
+import { ThemeEntity } from './theme.entity';
+import { AttachmentEntity } from '../../bases/attachment-entity';
 
 @Entity({ name: 'theme_attachment' })
 export class ThemeAttachmentEntity extends AttachmentEntity {

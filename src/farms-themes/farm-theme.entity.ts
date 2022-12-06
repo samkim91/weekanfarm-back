@@ -1,6 +1,6 @@
 import { Entity, ManyToOne } from 'typeorm';
-import { ThemeEntity } from '../themes/theme.entity';
-import { FarmEntity } from '../farms/farm.entity';
+import { ThemeEntity } from '../themes/entities/theme.entity';
+import { FarmEntity } from '../farms/entities/farm.entity';
 import { CommonEntity } from '../bases/common-entity';
 
 @Entity({ name: 'farm_theme' })

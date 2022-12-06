@@ -1,9 +1,18 @@
-import { Column, Entity, JoinColumn, OneToMany, OneToOne } from 'typeorm';
-import { FarmThemeEntity } from '../farms-themes/farm-theme.entity';
-import { ThemeAttachmentEntity } from '../themes-attachments/theme-attachment.entity';
-import { CommonEntity } from '../bases/common-entity';
+import {
+  Column,
+  Entity,
+  Index,
+  JoinColumn,
+  OneToMany,
+  OneToOne,
+  Unique,
+} from 'typeorm';
+import { FarmThemeEntity } from '../../farms-themes/farm-theme.entity';
+import { ThemeAttachmentEntity } from './theme-attachment.entity';
+import { CommonEntity } from '../../bases/common-entity';
 
 @Entity({ name: 'theme' })
+@Index(['code'], { unique: true })
 export class ThemeEntity extends CommonEntity {
   @Column({ length: 128 })
   name: string;

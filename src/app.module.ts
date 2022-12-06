@@ -3,6 +3,7 @@ import { FarmsModule } from './farms/farms.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { typeORMConfig } from './configs/typeorm.config';
+import { ThemesModule } from './themes/themes.module';
 import * as process from 'process';
 
 @Module({
@@ -19,8 +20,7 @@ import * as process from 'process';
       inject: [ConfigService],
     }),
     FarmsModule,
+    ThemesModule,
   ],
-  controllers: [],
-  providers: [],
 })
 export class AppModule {}

@@ -1,10 +1,10 @@
 import { Column, Entity, OneToMany } from 'typeorm';
-import { FarmAttachmentEntity } from '../farms-attachments/farm-attachment.entity';
-import { OpeningHourEntity } from '../opening-hours/opening-hour.entity';
-import { PricingEntity } from '../pricings/pricing.entity';
-import { FarmThemeEntity } from '../farms-themes/farm-theme.entity';
-import { CommonEntity } from '../bases/common-entity';
-import { FarmUrlEntity } from '../farms-urls/farm-url.entity';
+import { FarmAttachmentEntity } from './farm-attachment.entity';
+import { OpeningHourEntity } from '../../opening-hours/opening-hour.entity';
+import { PricingEntity } from '../../pricings/pricing.entity';
+import { FarmThemeEntity } from '../../farms-themes/farm-theme.entity';
+import { CommonEntity } from '../../bases/common-entity';
+import { FarmUrlEntity } from '../../farms-urls/farm-url.entity';
 
 @Entity({ name: 'farm' })
 export class FarmEntity extends CommonEntity {
