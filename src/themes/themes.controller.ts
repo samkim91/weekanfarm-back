@@ -16,7 +16,7 @@ import { ThemesService } from './themes.service';
 import { CreateThemeDto } from './dto/create-theme.dto';
 import { UpdateThemeDto } from './dto/update-theme.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { imageExtensionsRegex } from '../bases/common.values';
+import { imageExtensionsRegex } from '../common/common.values';
 import { getBodyParserOptions } from '@nestjs/platform-express/adapters/utils/get-body-parser-options.util';
 
 @Controller('themes')

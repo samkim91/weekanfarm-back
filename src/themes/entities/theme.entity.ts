@@ -9,7 +9,7 @@ import {
 } from 'typeorm';
 import { FarmThemeEntity } from '../../farms-themes/farm-theme.entity';
 import { ThemeAttachmentEntity } from './theme-attachment.entity';
-import { CommonEntity } from '../../bases/common-entity';
+import { CommonEntity } from '../../common/common-entity';
 
 @Entity({ name: 'theme' })
 @Index(['code'], { unique: true })
@@ -34,6 +34,7 @@ export class ThemeEntity extends CommonEntity {
   @OneToOne(
     () => ThemeAttachmentEntity,
     (themeAttachment) => themeAttachment.theme,
+    { cascade: true },
   )
   @JoinColumn()
   attachment: ThemeAttachmentEntity;

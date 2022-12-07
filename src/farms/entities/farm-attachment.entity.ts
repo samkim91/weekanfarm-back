@@ -1,6 +1,6 @@
 import { Entity, ManyToOne } from 'typeorm';
 import { FarmEntity } from './farm.entity';
-import { AttachmentEntity } from '../../bases/attachment-entity';
+import { AttachmentEntity } from '../../common/attachment-entity';
 
 @Entity({ name: 'farm_attachment' })
 export class FarmAttachmentEntity extends AttachmentEntity {

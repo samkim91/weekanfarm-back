@@ -1,7 +1,7 @@
 import { Column, Entity, ManyToOne } from 'typeorm';
 import { FarmEntity } from '../farms/entities/farm.entity';
 import { DayOfWeek } from '../enums/day.of.week';
-import { CommonEntity } from '../bases/common-entity';
+import { CommonEntity } from '../common/common-entity';
 
 @Entity({ name: 'opening_hour' })
 export class OpeningHourEntity extends CommonEntity {

@@ -10,7 +10,7 @@ import * as process from 'process';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: '.env.dev',
+      envFilePath: ['.env.local', '.env'],
       ignoreEnvFile: process.env.NODE_ENV === 'prod',
     }),
     TypeOrmModule.forRootAsync({

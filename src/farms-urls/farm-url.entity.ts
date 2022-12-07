@@ -1,5 +1,5 @@
 import { Column, Entity, ManyToOne } from 'typeorm';
-import { CommonEntity } from '../bases/common-entity';
+import { CommonEntity } from '../common/common-entity';
 import { SnsType } from '../enums/sns.type';
 import { FarmEntity } from '../farms/entities/farm.entity';
 

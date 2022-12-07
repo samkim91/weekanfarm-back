@@ -1,4 +1,4 @@
-const FileType = {
+export const FileType = {
   FILE: 'file',
   IMAGE: 'image',
 } as const;
