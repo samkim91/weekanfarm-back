@@ -1,7 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateThemeDto } from './dto/create-theme.dto';
 import { UpdateThemeDto } from './dto/update-theme.dto';
-import { ReadThemeDto } from './dto/read-theme.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ThemeEntity } from './entities/theme.entity';
 import { Repository } from 'typeorm';
@@ -19,7 +18,7 @@ export class ThemesService {
   async create(
     createThemeDto: CreateThemeDto,
     image: Express.Multer.File,
-  ): Promise<ReadThemeDto> {
+  ): Promise<ThemeEntity> {
     const themeEntity = plainToInstance(ThemeEntity, createThemeDto);
 
     await this.themesRepository.manager.transaction(
@@ -32,15 +31,22 @@ export class ThemesService {
       },
     );
 
-    return plainToInstance(ReadThemeDto, themeEntity);
+    return plainToInstance(ThemeEntity, themeEntity);
   }
 
   findAll() {
     return `This action returns all themes`;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} theme`;
+  async findOne(id: number): Promise<ThemeEntity> {
+    const themeEntity = await this.themesRepository.findOne({
+      where: { id: id },
+      relations: { attachment: true },
+    });
+
+    if (!themeEntity) throw new NotFoundException();
+
+    return plainToInstance(ThemeEntity, themeEntity);
   }
 
   update(id: number, updateThemeDto: UpdateThemeDto) {
