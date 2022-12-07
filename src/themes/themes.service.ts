@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { CreateThemeDto } from './dto/create-theme.dto';
 import { UpdateThemeDto } from './dto/update-theme.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -31,7 +31,7 @@ export class ThemesService {
       },
     );
 
-    return plainToInstance(ThemeEntity, themeEntity);
+    return themeEntity;
   }
 
   findAll() {
@@ -39,18 +39,23 @@ export class ThemesService {
   }
 
   async findOne(id: number): Promise<ThemeEntity> {
-    const themeEntity = await this.themesRepository.findOne({
+    return await this.themesRepository.findOneOrFail({
       where: { id: id },
       relations: { attachment: true },
     });
-
-    if (!themeEntity) throw new NotFoundException();
-
-    return plainToInstance(ThemeEntity, themeEntity);
   }
 
-  update(id: number, updateThemeDto: UpdateThemeDto) {
-    return `This action updates a #${id} theme`;
+  async update(
+    id: number,
+    updateThemeDto: UpdateThemeDto,
+    image: Express.Multer.File,
+  ) {
+    const themeEntity = plainToInstance(ThemeEntity, updateThemeDto);
+
+    const result = await this.themesRepository.update({ id: id }, themeEntity);
+
+    const resultRow = result && result.affected! > 0;
+    return resultRow;
   }
 
   remove(id: number) {

@@ -30,6 +30,6 @@ export class CreateThemeDto {
 
   @IsNotEmpty()
   @IsBoolean()
-  @Type(() => Boolean)
+  @Transform(({ value }) => value === 'true')
   isActive: boolean;
 }

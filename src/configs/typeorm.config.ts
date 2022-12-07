@@ -13,5 +13,6 @@ export const typeORMConfig = (
     database: configService.get('DATABASE_NAME'),
     entities: ['dist/**/*.entity.js'],
     synchronize: configService.get('DATABASE_SYNCHRONIZE'),
+    logging: JSON.parse(configService.get('DATABASE_LOG')!),
   };
 };
