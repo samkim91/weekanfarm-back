@@ -14,13 +14,10 @@ export class ThemesAttachmentsService {
     private readonly storagesService: StoragesService,
   ) {}
 
-  async create(
-    transactionalEntityManager: EntityManager,
-    image: Express.Multer.File,
-  ): Promise<ThemeAttachmentEntity> {
+  async create(image: Express.Multer.File): Promise<ThemeAttachmentEntity> {
     const uploadingResult = await this.storagesService.uploadFile(image);
 
-    const themeAttachmentEntity = this.themeAttachmentRepository.create({
+    return this.themeAttachmentRepository.create({
       s3Key: uploadingResult.key,
       url: uploadingResult.location,
       fileName: image.originalname,
@@ -29,30 +26,30 @@ export class ThemesAttachmentsService {
         : FileType.FILE,
       size: image.size,
     });
-
-    return await transactionalEntityManager.save(themeAttachmentEntity);
   }
 
   findAll() {
     return `This action returns all themesAttachments`;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} themesAttachment`;
+  async findOne(id: number) {
+    return await this.themeAttachmentRepository.findOneBy({ id: id });
   }
 
-  update(
-    transactionalEntityManager: EntityManager,
+  async update(
     id: number,
     image: Express.Multer.File,
-  ) {
-    // todo : image 가 not null 이면, S3 에서 삭제, DB에서 이미지 데이터 삭제, 새로운 이미지 s3 업로드, 새로운 이미지 데이터 DB 삽입
-    // todo : 아니면 그냥 리턴
-
-    return `This action updates a #${id} themesAttachment`;
+  ): Promise<ThemeAttachmentEntity> {
+    await this.remove(id);
+    return await this.create(image);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} themesAttachment`;
+  async remove(id: number) {
+    const themeAttachmentEntity = await this.findOne(id);
+
+    if (themeAttachmentEntity) {
+      await this.storagesService.deleteFile(themeAttachmentEntity.s3Key);
+      await this.themeAttachmentRepository.delete(themeAttachmentEntity.id);
+    }
   }
 }

@@ -6,6 +6,7 @@ import { ThemeEntity } from './entities/theme.entity';
 import { Repository } from 'typeorm';
 import { plainToInstance } from 'class-transformer';
 import { ThemesAttachmentsService } from './themes-attachments.service';
+import { raw } from 'express';
 
 @Injectable()
 export class ThemesService {
@@ -19,20 +20,11 @@ export class ThemesService {
     createThemeDto: CreateThemeDto,
     image: Express.Multer.File,
   ): Promise<ThemeEntity> {
-    // const themeEntity = plainToInstance(ThemeEntity, createThemeDto);
     const themeEntity = this.themesRepository.create(createThemeDto);
 
-    await this.themesRepository.manager.transaction(
-      async (transactionalEntityManager) => {
-        themeEntity.attachment = await this.themesAttachmentsService.create(
-          transactionalEntityManager,
-          image,
-        );
-        await transactionalEntityManager.save(themeEntity);
-      },
-    );
+    themeEntity.attachment = await this.themesAttachmentsService.create(image);
 
-    return themeEntity;
+    return await this.themesRepository.save(themeEntity);
   }
 
   findAll() {
@@ -42,7 +34,6 @@ export class ThemesService {
   async findOne(id: number): Promise<ThemeEntity> {
     return await this.themesRepository.findOneOrFail({
       where: { id: id },
-      relations: { attachment: true },
     });
   }
 
@@ -51,15 +42,21 @@ export class ThemesService {
     updateThemeDto: UpdateThemeDto,
     image: Express.Multer.File,
   ) {
-    const themeEntity = plainToInstance(ThemeEntity, updateThemeDto);
+    const themeEntity = this.themesRepository.create(updateThemeDto);
 
-    const result = await this.themesRepository.update({ id: id }, themeEntity);
+    if (image) {
+      themeEntity.attachment = await this.themesAttachmentsService.update(
+        themeEntity.attachment.id,
+        image,
+      );
+    }
 
-    const resultRow = result && result.affected! > 0;
-    return resultRow;
+    await this.themesRepository.update({ id: id }, themeEntity);
+
+    return themeEntity;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} theme`;
+  async remove(id: number) {
+    return await this.themesRepository.delete(id);
   }
 }

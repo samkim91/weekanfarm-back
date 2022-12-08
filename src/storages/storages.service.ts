@@ -26,5 +26,17 @@ export class StoragesService {
     }
   }
 
-  async deleteFile(key: string) {}
+  async deleteFile(key: string) {
+    try {
+      const result = await s3
+        .deleteObject({
+          Bucket: this.configService.get('AWS_S3_BUCKET_NAME')!,
+          Key: key,
+        })
+        .promise();
+    } catch (e) {
+      console.log(e.message);
+      throw new BadRequestException(e.message);
+    }
+  }
 }
