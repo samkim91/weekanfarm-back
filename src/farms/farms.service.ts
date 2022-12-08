@@ -18,14 +18,15 @@ export class FarmsService {
 
   async create(
     createFarmDto: CreateFarmDto,
-    images: Express.Multer.File[],
+    files: Express.Multer.File[],
   ): Promise<FarmEntity> {
     const farmEntity = this.farmsRepository.create(createFarmDto);
 
-    // TODO themes, urls, opening-hours, pricings 추가 필요
-    if (Array.isArray(images) && images.length != 0) {
-      // TODO attachments create
+    if (Array.isArray(files) && files.length != 0) {
+      farmEntity.attachments = await this.farmsAttachmentService.create(files);
     }
+
+    // TODO themes, urls, opening-hours, pricings 추가 필요
 
     return await this.farmsRepository.save(farmEntity);
   }
@@ -40,12 +41,14 @@ export class FarmsService {
   async update(
     id: number,
     updateFarmDto: UpdateFarmDto,
-    images: Express.Multer.File[],
+    files: Express.Multer.File[],
   ) {
     const farmEntity = this.farmsRepository.create(updateFarmDto);
 
-    if (Array.isArray(images) && images.length != 0) {
-      // TODO attachments update
+    await this.farmsAttachmentService.remove(id, farmEntity.attachments);
+
+    if (Array.isArray(files) && files.length != 0) {
+      farmEntity.attachments = await this.farmsAttachmentService.create(files);
     }
 
     // TODO themes, urls, openingHours, pricings 업데이트
@@ -55,5 +58,6 @@ export class FarmsService {
 
   async remove(id: number) {
     return await this.farmsRepository.delete(id);
+    // s3 delete 로직 추가
   }
 }

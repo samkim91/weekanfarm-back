@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { UploadStorageResponse } from './upload.storage.response';
 import { ConfigService } from '@nestjs/config';
 import { v4 as uuid } from 'uuid';
@@ -36,7 +40,9 @@ export class StoragesService {
         .promise();
     } catch (e) {
       console.log(e.message);
-      throw new BadRequestException(e.message);
+      throw new InternalServerErrorException(
+        'AWS connection error: ' + e.message,
+      );
     }
   }
 }

@@ -12,7 +12,7 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { FarmsService } from './farms.service';
-import { FileInterceptor } from '@nestjs/platform-express';
+import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { CreateFarmDto } from './dto/create-farm.dto';
 import { FarmEntity } from './entities/farm.entity';
 import { IMAGE_EXTENSIONS_REGEX } from '../utils/regex';
@@ -23,21 +23,18 @@ export class FarmsController {
   constructor(private readonly farmsService: FarmsService) {}
 
   @Post()
-  @UseInterceptors(FileInterceptor('images'))
+  @UseInterceptors(FilesInterceptor('images'))
   create(
     @Body(new ValidationPipe({ transform: true }))
     createFarmDto: CreateFarmDto,
     @UploadedFiles(
       new ParseFilePipe({
         fileIsRequired: false,
-        validators: [
-          new FileTypeValidator({ fileType: IMAGE_EXTENSIONS_REGEX }),
-        ],
       }),
     )
-    images: Express.Multer.File[],
+    files: Express.Multer.File[],
   ): Promise<FarmEntity> {
-    return this.farmsService.create(createFarmDto, images);
+    return this.farmsService.create(createFarmDto, files);
   }
 
   @Get(':id')
@@ -46,7 +43,7 @@ export class FarmsController {
   }
 
   @Post(':id')
-  @UseInterceptors(FileInterceptor('images'))
+  @UseInterceptors(FilesInterceptor('images'))
   update(
     @Param('id') id: string,
     @Body(new ValidationPipe({ transform: true }))
@@ -54,14 +51,14 @@ export class FarmsController {
     @UploadedFiles(
       new ParseFilePipe({
         fileIsRequired: false,
-        validators: [
-          new FileTypeValidator({ fileType: IMAGE_EXTENSIONS_REGEX }),
-        ],
+        // validators: [
+        //   new FileTypeValidator({ fileType: IMAGE_EXTENSIONS_REGEX }),
+        // ],
       }),
     )
-    images: Express.Multer.File[],
+    files: Express.Multer.File[],
   ) {
-    return this.farmsService.update(+id, updateFarmDto, images);
+    return this.farmsService.update(+id, updateFarmDto, files);
   }
 
   @Delete(':id')

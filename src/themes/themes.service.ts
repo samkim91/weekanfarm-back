@@ -68,5 +68,6 @@ export class ThemesService {
 
   async remove(id: number) {
     return await this.themesRepository.delete(id);
+    // s3 delete 로직 추가
   }
 }
