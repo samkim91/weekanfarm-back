@@ -19,7 +19,8 @@ export class ThemesService {
     createThemeDto: CreateThemeDto,
     image: Express.Multer.File,
   ): Promise<ThemeEntity> {
-    const themeEntity = plainToInstance(ThemeEntity, createThemeDto);
+    // const themeEntity = plainToInstance(ThemeEntity, createThemeDto);
+    const themeEntity = this.themesRepository.create(createThemeDto);
 
     await this.themesRepository.manager.transaction(
       async (transactionalEntityManager) => {

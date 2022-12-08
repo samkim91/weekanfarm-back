@@ -20,14 +20,15 @@ export class ThemesAttachmentsService {
   ): Promise<ThemeAttachmentEntity> {
     const uploadingResult = await this.storagesService.uploadFile(image);
 
-    const themeAttachmentEntity = new ThemeAttachmentEntity();
-    themeAttachmentEntity.s3Key = uploadingResult.key;
-    themeAttachmentEntity.url = uploadingResult.location;
-    themeAttachmentEntity.fileName = image.originalname;
-    themeAttachmentEntity.type = imageExtensionsRegex.test(image.mimetype)
-      ? FileType.IMAGE
-      : FileType.FILE;
-    themeAttachmentEntity.size = image.size;
+    const themeAttachmentEntity = this.themeAttachmentRepository.create({
+      s3Key: uploadingResult.key,
+      url: uploadingResult.location,
+      fileName: image.originalname,
+      type: imageExtensionsRegex.test(image.mimetype)
+        ? FileType.IMAGE
+        : FileType.FILE,
+      size: image.size,
+    });
 
     return await transactionalEntityManager.save(themeAttachmentEntity);
   }
