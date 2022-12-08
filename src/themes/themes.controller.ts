@@ -1,25 +1,23 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Patch,
-  Param,
+  Controller,
   Delete,
-  UploadedFile,
-  ValidationPipe,
-  UseInterceptors,
-  ParseFilePipe,
   FileTypeValidator,
-  UsePipes,
+  Get,
+  Param,
+  ParseFilePipe,
+  Post,
+  UploadedFile,
+  UseInterceptors,
+  ValidationPipe,
 } from '@nestjs/common';
 import { ThemesService } from './themes.service';
 import { CreateThemeDto } from './dto/create-theme.dto';
 import { UpdateThemeDto } from './dto/update-theme.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { imageExtensionsRegex } from '../common/common.values';
-import { getBodyParserOptions } from '@nestjs/platform-express/adapters/utils/get-body-parser-options.util';
-import { IsOptional } from 'class-validator';
+import { ThemeEntity } from './entities/theme.entity';
+import { Paginate, Paginated, PaginateQuery } from 'nestjs-paginate';
 
 @Controller('themes')
 export class ThemesController {
@@ -41,12 +39,12 @@ export class ThemesController {
   }
 
   @Get()
-  findAll() {
-    return this.themesService.findAll();
+  findAll(@Paginate() query: PaginateQuery): Promise<Paginated<ThemeEntity>> {
+    return this.themesService.findAll(query);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id') id: string): Promise<ThemeEntity> {
     return this.themesService.findOne(+id);
   }
 

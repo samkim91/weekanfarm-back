@@ -28,10 +28,6 @@ export class ThemesAttachmentsService {
     });
   }
 
-  findAll() {
-    return `This action returns all themesAttachments`;
-  }
-
   async findOne(id: number) {
     return await this.themeAttachmentRepository.findOneBy({ id: id });
   }

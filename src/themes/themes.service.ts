@@ -4,9 +4,13 @@ import { UpdateThemeDto } from './dto/update-theme.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ThemeEntity } from './entities/theme.entity';
 import { Repository } from 'typeorm';
-import { plainToInstance } from 'class-transformer';
 import { ThemesAttachmentsService } from './themes-attachments.service';
-import { raw } from 'express';
+import {
+  FilterOperator,
+  paginate,
+  Paginated,
+  PaginateQuery,
+} from 'nestjs-paginate';
 
 @Injectable()
 export class ThemesService {
@@ -27,8 +31,16 @@ export class ThemesService {
     return await this.themesRepository.save(themeEntity);
   }
 
-  findAll() {
-    return `This action returns all themes`;
+  async findAll(query: PaginateQuery): Promise<Paginated<ThemeEntity>> {
+    return paginate(query, this.themesRepository, {
+      sortableColumns: ['id', 'code', 'priority', 'isActive', 'name'],
+      defaultSortBy: [['priority', 'ASC']],
+      filterableColumns: {
+        isActive: [FilterOperator.IN],
+        code: [FilterOperator.ILIKE],
+        name: [FilterOperator.ILIKE],
+      },
+    });
   }
 
   async findOne(id: number): Promise<ThemeEntity> {
