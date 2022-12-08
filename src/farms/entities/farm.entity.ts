@@ -14,13 +14,13 @@ export class FarmEntity extends CommonEntity {
   @Column({ length: 16 })
   mainPhone: string;
 
-  @Column({ length: 16 })
+  @Column({ length: 16, default: '' })
   alternatePhone: string;
 
   @Column({ length: 100 })
   address: string;
 
-  @Column({ length: 100 })
+  @Column({ length: 100, default: '' })
   detailAddress: string;
 
   @Column({ type: 'text' })
@@ -50,22 +50,35 @@ export class FarmEntity extends CommonEntity {
   @Column({ default: true })
   isActive: boolean;
 
-  @OneToMany(() => FarmThemeEntity, (farmTheme) => farmTheme.farm)
+  @OneToMany(() => FarmThemeEntity, (farmTheme) => farmTheme.farm, {
+    cascade: true,
+    eager: true,
+  })
   farmThemes: FarmThemeEntity[];
 
-  @OneToMany(() => OpeningHourEntity, (openingHour) => openingHour.farm)
+  @OneToMany(() => OpeningHourEntity, (openingHour) => openingHour.farm, {
+    cascade: true,
+    eager: true,
+  })
   openingHours: OpeningHourEntity[];
 
-  @OneToMany(() => PricingEntity, (pricing) => pricing.farm)
+  @OneToMany(() => PricingEntity, (pricing) => pricing.farm, {
+    cascade: true,
+    eager: true,
+  })
   pricing: PricingEntity[];
 
   @OneToMany(
     () => FarmAttachmentEntity,
     (farmAttachment) => farmAttachment.farm,
+    { cascade: true, eager: true },
   )
   attachments: FarmAttachmentEntity[];
 
   // farms-urls
-  @OneToMany(() => FarmUrlEntity, (farmUrl) => farmUrl.farm)
+  @OneToMany(() => FarmUrlEntity, (farmUrl) => farmUrl.farm, {
+    cascade: true,
+    eager: true,
+  })
   urls: FarmUrlEntity[];
 }

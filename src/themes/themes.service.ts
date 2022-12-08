@@ -63,9 +63,7 @@ export class ThemesService {
       );
     }
 
-    await this.themesRepository.update({ id: id }, themeEntity);
-
-    return themeEntity;
+    return await this.themesRepository.update({ id: id }, themeEntity);
   }
 
   async remove(id: number) {

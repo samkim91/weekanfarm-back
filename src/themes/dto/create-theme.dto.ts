@@ -4,7 +4,6 @@ import {
   IsNumber,
   IsString,
   Matches,
-  Max,
   MaxLength,
 } from 'class-validator';
 import { Transform, Type } from 'class-transformer';

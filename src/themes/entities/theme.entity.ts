@@ -1,11 +1,4 @@
-import {
-  Column,
-  Entity,
-  Index,
-  JoinColumn,
-  OneToMany,
-  OneToOne,
-} from 'typeorm';
+import { Column, Entity, Index, OneToMany, OneToOne } from 'typeorm';
 import { FarmThemeEntity } from '../../farms-themes/farm-theme.entity';
 import { ThemeAttachmentEntity } from './theme-attachment.entity';
 import { CommonEntity } from '../../common/common-entity';

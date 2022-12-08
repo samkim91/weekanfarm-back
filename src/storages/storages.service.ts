@@ -1,8 +1,8 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { UploadStorageResponse } from '../common/upload.storage.response';
+import { UploadStorageResponse } from './upload.storage.response';
 import { ConfigService } from '@nestjs/config';
 import { v4 as uuid } from 'uuid';
-import { s3 } from '../common/common.values';
+import { s3 } from './s3-initialize';
 
 @Injectable()
 export class StoragesService {
@@ -28,7 +28,7 @@ export class StoragesService {
 
   async deleteFile(key: string) {
     try {
-      const result = await s3
+      await s3
         .deleteObject({
           Bucket: this.configService.get('AWS_S3_BUCKET_NAME')!,
           Key: key,

@@ -15,9 +15,9 @@ import { ThemesService } from './themes.service';
 import { CreateThemeDto } from './dto/create-theme.dto';
 import { UpdateThemeDto } from './dto/update-theme.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { imageExtensionsRegex } from '../common/common.values';
 import { ThemeEntity } from './entities/theme.entity';
 import { Paginate, Paginated, PaginateQuery } from 'nestjs-paginate';
+import { IMAGE_EXTENSIONS_REGEX } from '../utils/regex';
 
 @Controller('themes')
 export class ThemesController {
@@ -30,11 +30,13 @@ export class ThemesController {
     createThemeDto: CreateThemeDto,
     @UploadedFile(
       new ParseFilePipe({
-        validators: [new FileTypeValidator({ fileType: imageExtensionsRegex })],
+        validators: [
+          new FileTypeValidator({ fileType: IMAGE_EXTENSIONS_REGEX }),
+        ],
       }),
     )
     image: Express.Multer.File,
-  ) {
+  ): Promise<ThemeEntity> {
     return this.themesService.create(createThemeDto, image);
   }
 
@@ -57,7 +59,9 @@ export class ThemesController {
     @UploadedFile(
       new ParseFilePipe({
         fileIsRequired: false,
-        validators: [new FileTypeValidator({ fileType: imageExtensionsRegex })],
+        validators: [
+          new FileTypeValidator({ fileType: IMAGE_EXTENSIONS_REGEX }),
+        ],
       }),
     )
     image: Express.Multer.File,

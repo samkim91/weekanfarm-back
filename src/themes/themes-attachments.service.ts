@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ThemeAttachmentEntity } from './entities/theme-attachment.entity';
-import { EntityManager, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { StoragesService } from '../storages/storages.service';
-import { imageExtensionsRegex } from '../common/common.values';
 import { FileType } from '../enums/file.type';
+import { IMAGE_EXTENSIONS_REGEX } from '../utils/regex';
 
 @Injectable()
 export class ThemesAttachmentsService {
@@ -21,7 +21,7 @@ export class ThemesAttachmentsService {
       s3Key: uploadingResult.key,
       url: uploadingResult.location,
       fileName: image.originalname,
-      type: imageExtensionsRegex.test(image.mimetype)
+      type: IMAGE_EXTENSIONS_REGEX.test(image.mimetype)
         ? FileType.IMAGE
         : FileType.FILE,
       size: image.size,
