@@ -5,6 +5,12 @@ import { Repository } from 'typeorm';
 import { CreateFarmDto } from './dto/create-farm.dto';
 import { FarmsAttachmentService } from './farms-attachment.service';
 import { UpdateFarmDto } from './dto/update-farm.dto';
+import {
+  FilterOperator,
+  paginate,
+  Paginated,
+  PaginateQuery,
+} from 'nestjs-paginate';
 
 @Injectable()
 export class FarmsService {
@@ -29,7 +35,47 @@ export class FarmsService {
     return await this.farmsRepository.save(farmEntity);
   }
 
-  // async findAll(query: PaginateQuery) {}
+  async findAll(query: PaginateQuery): Promise<Paginated<FarmEntity>> {
+    return paginate(query, this.farmsRepository, {
+      relations: [
+        'farmThemes',
+        'openingHours',
+        'pricing',
+        'attachments',
+        'urls',
+      ],
+      sortableColumns: [
+        'id',
+        'name',
+        'mainPhone',
+        'isActive',
+        'isReservationCancelable',
+        'pricing.cost',
+        'farmThemes.theme.code',
+        'farmThemes.theme.name',
+      ],
+      defaultSortBy: [['id', 'DESC']],
+      filterableColumns: {
+        name: [FilterOperator.ILIKE],
+        mainPhone: [FilterOperator.ILIKE],
+        alternatePhone: [FilterOperator.ILIKE],
+        address: [FilterOperator.ILIKE],
+        directions: [FilterOperator.ILIKE],
+        email: [FilterOperator.ILIKE],
+        ownerNotes: [FilterOperator.ILIKE],
+        hashTags: [FilterOperator.ILIKE],
+        conveniences: [FilterOperator.ILIKE],
+        isReservationCancelable: [FilterOperator.ILIKE],
+        refundPolicy: [FilterOperator.ILIKE],
+        adminNotes: [FilterOperator.ILIKE],
+        isActive: [FilterOperator.IN],
+        'farmThemes.theme.name': [FilterOperator.ILIKE],
+        'farmThemes.theme.code': [FilterOperator.ILIKE],
+        'pricing.cost': [FilterOperator.BTW],
+      },
+    });
+  }
+
   async findOne(id: number) {
     return await this.farmsRepository.findOneOrFail({
       where: { id: id },

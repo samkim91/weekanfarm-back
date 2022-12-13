@@ -2,7 +2,6 @@ import {
   Body,
   Controller,
   Delete,
-  FileTypeValidator,
   Get,
   Param,
   ParseFilePipe,
@@ -12,11 +11,11 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { FarmsService } from './farms.service';
-import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
+import { FilesInterceptor } from '@nestjs/platform-express';
 import { CreateFarmDto } from './dto/create-farm.dto';
 import { FarmEntity } from './entities/farm.entity';
-import { IMAGE_EXTENSIONS_REGEX } from '../utils/regex';
 import { UpdateFarmDto } from './dto/update-farm.dto';
+import { Paginate, Paginated, PaginateQuery } from 'nestjs-paginate';
 
 @Controller('farms')
 export class FarmsController {
@@ -35,6 +34,11 @@ export class FarmsController {
     files: Express.Multer.File[],
   ): Promise<FarmEntity> {
     return this.farmsService.create(createFarmDto, files);
+  }
+
+  @Get()
+  findAll(@Paginate() query: PaginateQuery): Promise<Paginated<FarmEntity>> {
+    return this.farmsService.findAll(query);
   }
 
   @Get(':id')

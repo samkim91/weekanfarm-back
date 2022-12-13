@@ -33,6 +33,7 @@ export class ThemesService {
 
   async findAll(query: PaginateQuery): Promise<Paginated<ThemeEntity>> {
     return paginate(query, this.themesRepository, {
+      relations: ['attachment'],
       sortableColumns: ['id', 'code', 'priority', 'isActive', 'name'],
       defaultSortBy: [['priority', 'ASC']],
       filterableColumns: {
