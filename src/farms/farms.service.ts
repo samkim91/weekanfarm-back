@@ -22,9 +22,7 @@ export class FarmsService {
   ): Promise<FarmEntity> {
     const farmEntity = this.farmsRepository.create(createFarmDto);
 
-    if (Array.isArray(files) && files.length != 0) {
-      farmEntity.attachments = await this.farmsAttachmentService.create(files);
-    }
+    farmEntity.attachments = await this.farmsAttachmentService.create(files);
 
     // TODO themes, urls, opening-hours, pricings 추가 필요
 
@@ -45,11 +43,11 @@ export class FarmsService {
   ) {
     const farmEntity = this.farmsRepository.create(updateFarmDto);
 
-    await this.farmsAttachmentService.remove(id, farmEntity.attachments);
-
-    if (Array.isArray(files) && files.length != 0) {
-      farmEntity.attachments = await this.farmsAttachmentService.create(files);
-    }
+    const newFarmAttachments = await this.farmsAttachmentService.update(
+      farmEntity,
+      files,
+    );
+    farmEntity.attachments.concat(newFarmAttachments);
 
     // TODO themes, urls, openingHours, pricings 업데이트
 
@@ -57,7 +55,11 @@ export class FarmsService {
   }
 
   async remove(id: number) {
-    return await this.farmsRepository.delete(id);
-    // s3 delete 로직 추가
+    const farmEntity = await this.findOne(id);
+
+    if (farmEntity) {
+      await this.farmsAttachmentService.remove(farmEntity.attachments);
+      return await this.farmsRepository.delete(id);
+    }
   }
 }

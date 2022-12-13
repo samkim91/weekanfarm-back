@@ -5,6 +5,7 @@ import { In, IsNull, Not, Repository } from 'typeorm';
 import { StoragesService } from '../storages/storages.service';
 import { IMAGE_EXTENSIONS_REGEX } from '../utils/regex';
 import { FileType } from '../enums/file.type';
+import { FarmEntity } from './entities/farm.entity';
 
 @Injectable()
 export class FarmsAttachmentService {
@@ -15,25 +16,47 @@ export class FarmsAttachmentService {
   ) {}
 
   async create(files: Express.Multer.File[]): Promise<FarmAttachmentEntity[]> {
-    return await Promise.all(
-      files.map(async (file): Promise<FarmAttachmentEntity> => {
-        const uploadingResult = await this.storagesService.uploadFile(file);
+    if (Array.isArray(files) && files.length != 0) {
+      return await Promise.all(
+        files.map(async (file): Promise<FarmAttachmentEntity> => {
+          const uploadingResult = await this.storagesService.uploadFile(file);
 
-        return this.farmAttachmentRepository.create({
-          s3Key: uploadingResult.key,
-          url: uploadingResult.location,
-          fileName: file.originalname,
-          type: IMAGE_EXTENSIONS_REGEX.test(file.mimetype)
-            ? FileType.IMAGE
-            : FileType.FILE,
-          size: file.size,
-        });
-      }),
-    );
+          return this.farmAttachmentRepository.create({
+            s3Key: uploadingResult.key,
+            url: uploadingResult.location,
+            fileName: file.originalname,
+            type: IMAGE_EXTENSIONS_REGEX.test(file.mimetype)
+              ? FileType.IMAGE
+              : FileType.FILE,
+            size: file.size,
+          });
+        }),
+      );
+    } else {
+      return await Promise.all([]);
+    }
   }
 
-  async findAll(ids: number[]): Promise<FarmAttachmentEntity[]> {
-    return await this.farmAttachmentRepository.find({ where: { id: In(ids) } });
+  async update(
+    farmEntity: FarmEntity,
+    files: Express.Multer.File[],
+  ): Promise<FarmAttachmentEntity[]> {
+    const deletingAttachments = await this.filterDeletingAttachments(
+      farmEntity.id,
+      farmEntity.attachments,
+    );
+
+    await this.remove(deletingAttachments);
+
+    return await this.create(files);
+  }
+
+  async filterDeletingAttachments(
+    farmId: number,
+    leftAttachment: FarmAttachmentEntity[],
+  ) {
+    const leftAttachmentIds = leftAttachment.map((attachment) => attachment.id);
+    return await this.findAllByFarmAndIdNotIn(farmId, leftAttachmentIds);
   }
 
   async findAllByFarmAndIdNotIn(
@@ -52,21 +75,7 @@ export class FarmsAttachmentService {
     });
   }
 
-  async remove(farmId: number, leftAttachment: FarmAttachmentEntity[]) {
-    const leftAttachmentIds = leftAttachment.map((attachment) => attachment.id);
-    const deletingAttachments = await this.findAllByFarmAndIdNotIn(
-      farmId,
-      leftAttachmentIds,
-    );
-    const deletingAttachmentIds = deletingAttachments.map(
-      (attachment) => attachment.id,
-    );
-    await this.removeAll(deletingAttachmentIds);
-  }
-
-  async removeAll(ids: number[]) {
-    const farmAttachments = await this.findAll(ids);
-
+  async remove(farmAttachments: FarmAttachmentEntity[]) {
     if (Array.isArray(farmAttachments) && farmAttachments.length > 0) {
       await Promise.all(
         farmAttachments.map(async (farmAttachment) => {
