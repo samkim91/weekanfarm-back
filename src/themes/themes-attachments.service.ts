@@ -45,7 +45,7 @@ export class ThemesAttachmentsService {
 
     if (themeAttachmentEntity) {
       await this.storagesService.deleteFile(themeAttachmentEntity.s3Key);
-      await this.themeAttachmentRepository.delete(themeAttachmentEntity.id);
+      await this.themeAttachmentRepository.remove(themeAttachmentEntity);
     }
   }
 }

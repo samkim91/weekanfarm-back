@@ -67,7 +67,11 @@ export class ThemesService {
   }
 
   async remove(id: number) {
-    return await this.themesRepository.delete(id);
-    // s3 delete 로직 추가
+    const themeEntity = await this.findOne(id);
+
+    if (themeEntity) {
+      await this.themesAttachmentsService.remove(themeEntity.attachment.id);
+      return await this.themesRepository.delete(id);
+    }
   }
 }
