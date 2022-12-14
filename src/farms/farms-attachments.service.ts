@@ -8,7 +8,7 @@ import { FileType } from '../enums/file.type';
 import { FarmEntity } from './entities/farm.entity';
 
 @Injectable()
-export class FarmsAttachmentService {
+export class FarmsAttachmentsService {
   constructor(
     @InjectRepository(FarmAttachmentEntity)
     private readonly farmAttachmentRepository: Repository<FarmAttachmentEntity>,

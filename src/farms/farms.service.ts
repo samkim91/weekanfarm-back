@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { FarmEntity } from './entities/farm.entity';
 import { Repository } from 'typeorm';
 import { CreateFarmDto } from './dto/create-farm.dto';
-import { FarmsAttachmentService } from './farms-attachment.service';
+import { FarmsAttachmentsService } from './farms-attachments.service';
 import { UpdateFarmDto } from './dto/update-farm.dto';
 import {
   FilterOperator,
@@ -11,6 +11,8 @@ import {
   Paginated,
   PaginateQuery,
 } from 'nestjs-paginate';
+import { ThemesService } from '../themes/themes.service';
+import { updateFarmEntity } from './entities/update-farm-entity';
 
 @Injectable()
 export class FarmsService {
@@ -19,7 +21,8 @@ export class FarmsService {
   constructor(
     @InjectRepository(FarmEntity)
     private readonly farmsRepository: Repository<FarmEntity>,
-    private readonly farmsAttachmentService: FarmsAttachmentService,
+    private readonly farmsAttachmentsService: FarmsAttachmentsService,
+    private readonly themesService: ThemesService,
   ) {}
 
   async create(
@@ -28,22 +31,24 @@ export class FarmsService {
   ): Promise<FarmEntity> {
     const farmEntity = this.farmsRepository.create(createFarmDto);
 
-    farmEntity.attachments = await this.farmsAttachmentService.create(files);
+    farmEntity.attachments = await this.farmsAttachmentsService.create(files);
 
-    // TODO themes, urls, opening-hours, pricings 추가 필요
+    if (createFarmDto.themes.length != 0) {
+      farmEntity.themes = await this.themesService.findAllByIds(
+        createFarmDto.themes.map((theme) => theme.id),
+      );
+    }
+
+    // TODO: 2022/12/13 urls
+    // TODO: 2022/12/13 opening-hours
+    // TODO: 2022/12/13 pricings
 
     return await this.farmsRepository.save(farmEntity);
   }
 
   async findAll(query: PaginateQuery): Promise<Paginated<FarmEntity>> {
     return paginate(query, this.farmsRepository, {
-      relations: [
-        'farmThemes',
-        'openingHours',
-        'pricing',
-        'attachments',
-        'urls',
-      ],
+      relations: ['themes', 'openingHours', 'pricing', 'attachments', 'urls'],
       sortableColumns: [
         'id',
         'name',
@@ -51,8 +56,8 @@ export class FarmsService {
         'isActive',
         'isReservationCancelable',
         'pricing.cost',
-        'farmThemes.theme.code',
-        'farmThemes.theme.name',
+        'themes.code',
+        'themes.name',
       ],
       defaultSortBy: [['id', 'DESC']],
       filterableColumns: {
@@ -69,8 +74,8 @@ export class FarmsService {
         refundPolicy: [FilterOperator.ILIKE],
         adminNotes: [FilterOperator.ILIKE],
         isActive: [FilterOperator.IN],
-        'farmThemes.theme.name': [FilterOperator.ILIKE],
-        'farmThemes.theme.code': [FilterOperator.ILIKE],
+        'themes.name': [FilterOperator.ILIKE],
+        'themes.code': [FilterOperator.ILIKE],
         'pricing.cost': [FilterOperator.BTW],
       },
     });
@@ -87,24 +92,33 @@ export class FarmsService {
     updateFarmDto: UpdateFarmDto,
     files: Express.Multer.File[],
   ) {
-    const farmEntity = this.farmsRepository.create(updateFarmDto);
+    const farmEntity = await this.findOne(id);
+    updateFarmEntity(farmEntity, updateFarmDto);
 
-    const newFarmAttachments = await this.farmsAttachmentService.update(
+    const newFarmAttachments = await this.farmsAttachmentsService.update(
       farmEntity,
       files,
     );
-    farmEntity.attachments.concat(newFarmAttachments);
+    farmEntity.attachments.push.apply(newFarmAttachments);
 
-    // TODO themes, urls, openingHours, pricings 업데이트
+    if (updateFarmDto.themes && updateFarmDto.themes.length > 0) {
+      farmEntity.themes = await this.themesService.findAllByIds(
+        updateFarmDto.themes.map((theme) => theme.id),
+      );
+    }
 
-    return await this.farmsRepository.update({ id: id }, farmEntity);
+    // TODO: 2022/12/13 urls
+    // TODO: 2022/12/13 opening-hours
+    // TODO: 2022/12/13 pricings
+
+    return await this.farmsRepository.save(farmEntity);
   }
 
   async remove(id: number) {
     const farmEntity = await this.findOne(id);
 
     if (farmEntity) {
-      await this.farmsAttachmentService.remove(farmEntity.attachments);
+      await this.farmsAttachmentsService.remove(farmEntity.attachments);
       return await this.farmsRepository.delete(id);
     }
   }

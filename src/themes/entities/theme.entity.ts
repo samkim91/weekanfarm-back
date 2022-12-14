@@ -1,5 +1,4 @@
-import { Column, Entity, Index, OneToMany, OneToOne } from 'typeorm';
-import { FarmThemeEntity } from '../../farms-themes/farm-theme.entity';
+import { Column, Entity, Index, OneToOne } from 'typeorm';
 import { ThemeAttachmentEntity } from './theme-attachment.entity';
 import { CommonEntity } from '../../common/common-entity';
 import { Type } from 'class-transformer';
@@ -18,9 +17,6 @@ export class ThemeEntity extends CommonEntity {
 
   @Column({ default: true })
   isActive: boolean;
-
-  @OneToMany(() => FarmThemeEntity, (farmTheme) => farmTheme.theme)
-  farmThemes: FarmThemeEntity[];
 
   @OneToOne(
     () => ThemeAttachmentEntity,

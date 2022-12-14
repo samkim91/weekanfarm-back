@@ -14,5 +14,6 @@ import { StoragesModule } from '../storages/storages.module';
   ],
   controllers: [ThemesController],
   providers: [ThemesService, ThemesAttachmentsService],
+  exports: [ThemesService],
 })
 export class ThemesModule {}

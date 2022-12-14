@@ -3,7 +3,7 @@ import { CreateThemeDto } from './dto/create-theme.dto';
 import { UpdateThemeDto } from './dto/update-theme.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ThemeEntity } from './entities/theme.entity';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { ThemesAttachmentsService } from './themes-attachments.service';
 import {
   FilterOperator,
@@ -40,6 +40,14 @@ export class ThemesService {
         isActive: [FilterOperator.IN],
         code: [FilterOperator.ILIKE],
         name: [FilterOperator.ILIKE],
+      },
+    });
+  }
+
+  async findAllByIds(ids: number[]): Promise<ThemeEntity[]> {
+    return await this.themesRepository.find({
+      where: {
+        id: In(ids),
       },
     });
   }

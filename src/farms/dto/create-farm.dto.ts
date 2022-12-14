@@ -1,6 +1,13 @@
-import { IsBoolean, IsNotEmpty, Matches, MaxLength } from 'class-validator';
-import { Transform } from 'class-transformer';
+import {
+  IsArray,
+  IsBoolean,
+  IsNotEmpty,
+  Matches,
+  MaxLength,
+} from 'class-validator';
+import { Transform, Type } from 'class-transformer';
 import { EMAIL_REGEX } from '../../utils/regex';
+import { ThemeEntity } from '../../themes/entities/theme.entity';
 
 export class CreateFarmDto {
   @IsNotEmpty()
@@ -51,4 +58,14 @@ export class CreateFarmDto {
   @IsBoolean()
   @Transform(({ value }) => value === 'true')
   isActive: boolean;
+
+  @IsArray()
+  @Type(() => ThemeEntity)
+  themes: ThemeEntity[];
+
+  // TODO: 2022/12/13 openingHours
+
+  // TODO: 2022/12/13 pricing
+
+  // TODO: 2022/12/13 urls
 }
