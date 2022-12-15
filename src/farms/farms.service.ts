@@ -14,6 +14,7 @@ import {
 import { ThemesService } from '../themes/themes.service';
 import { updateFarmEntity } from './entities/update-farm-entity';
 import { FarmsUrlsService } from './farms-urls.service';
+import { FarmsOpeningHoursService } from './farms-opening-hours.service';
 
 @Injectable()
 export class FarmsService {
@@ -25,6 +26,7 @@ export class FarmsService {
     private readonly farmsAttachmentsService: FarmsAttachmentsService,
     private readonly themesService: ThemesService,
     private readonly farmsUrlsService: FarmsUrlsService,
+    private readonly farmsOpeningHoursService: FarmsOpeningHoursService,
   ) {}
 
   async create(
@@ -41,7 +43,10 @@ export class FarmsService {
 
     farmEntity.urls = await this.farmsUrlsService.create(createFarmDto.urls);
 
-    // TODO: 2022/12/13 opening-hours
+    farmEntity.openingHours = await this.farmsOpeningHoursService.create(
+      createFarmDto.openingHours,
+    );
+
     // TODO: 2022/12/13 pricings
 
     return await this.farmsRepository.save(farmEntity);
@@ -111,7 +116,11 @@ export class FarmsService {
       updateFarmDto.urls,
     );
 
-    // TODO: 2022/12/13 opening-hours
+    farmEntity.openingHours = await this.farmsOpeningHoursService.update(
+      farmEntity,
+      updateFarmDto.openingHours,
+    );
+
     // TODO: 2022/12/13 pricings
 
     return await this.farmsRepository.save(farmEntity);

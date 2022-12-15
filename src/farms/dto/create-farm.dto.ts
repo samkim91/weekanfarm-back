@@ -4,12 +4,13 @@ import {
   IsNotEmpty,
   Matches,
   MaxLength,
+  ValidateNested,
 } from 'class-validator';
 import { Transform, Type } from 'class-transformer';
 import { EMAIL_REGEX } from '../../utils/regex';
-import { ThemeEntity } from '../../themes/entities/theme.entity';
 import { CreateFarmUrlDto } from './create-farm-url.dto';
 import { CreateFarmThemeDto } from '../../themes/dto/create-farm-theme.dto';
+import { CreateFarmOpeningHourDto } from './create-farm-opening-hour.dto';
 
 export class CreateFarmDto {
   @IsNotEmpty()
@@ -68,9 +69,14 @@ export class CreateFarmDto {
 
   @IsArray()
   @Type(() => CreateFarmUrlDto)
+  @ValidateNested()
   urls: CreateFarmUrlDto[];
 
   // TODO: 2022/12/13 openingHours
+  @IsArray()
+  @Type(() => CreateFarmOpeningHourDto)
+  @ValidateNested()
+  openingHours: CreateFarmOpeningHourDto[];
 
   // TODO: 2022/12/13 pricings
 }
