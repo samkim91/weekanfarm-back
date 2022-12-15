@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { FarmUrlEntity } from './entities/farm-url.entity';
-import { CreateFarmUrlDto } from './dto/create-farm-url.dto';
-import { FarmEntity } from './entities/farm.entity';
+import { FarmUrlEntity } from '../entities/farm-url.entity';
+import { CreateFarmUrlDto } from '../dtos/create-farm-url.dto';
+import { FarmEntity } from '../entities/farm.entity';
 
 @Injectable()
 export class FarmsUrlsService {

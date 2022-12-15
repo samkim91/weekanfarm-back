@@ -1,9 +1,9 @@
 import { Column, Entity, ManyToOne } from 'typeorm';
-import { FarmEntity } from '../farms/entities/farm.entity';
-import { CommonEntity } from '../common/common-entity';
+import { FarmEntity } from './farm.entity';
+import { CommonEntity } from '../../common/common-entity';
 
 @Entity({ name: 'pricing' })
-export class PricingEntity extends CommonEntity {
+export class FarmPricingEntity extends CommonEntity {
   @Column({ length: 256 })
   eventName: string;
 

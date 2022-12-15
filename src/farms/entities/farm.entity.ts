@@ -1,7 +1,7 @@
 import { Column, Entity, JoinTable, ManyToMany, OneToMany } from 'typeorm';
 import { FarmAttachmentEntity } from './farm-attachment.entity';
 import { FarmOpeningHourEntity } from './farm-opening-hour.entity';
-import { PricingEntity } from '../../pricings/pricing.entity';
+import { FarmPricingEntity } from './farm-pricing.entity';
 import { CommonEntity } from '../../common/common-entity';
 import { FarmUrlEntity } from './farm-url.entity';
 import { ThemeEntity } from '../../themes/entities/theme.entity';
@@ -60,11 +60,11 @@ export class FarmEntity extends CommonEntity {
   })
   openingHours: FarmOpeningHourEntity[];
 
-  @OneToMany(() => PricingEntity, (pricing) => pricing.farm, {
+  @OneToMany(() => FarmPricingEntity, (pricing) => pricing.farm, {
     cascade: true,
     eager: true,
   })
-  pricing: PricingEntity[];
+  pricing: FarmPricingEntity[];
 
   @OneToMany(
     () => FarmAttachmentEntity,

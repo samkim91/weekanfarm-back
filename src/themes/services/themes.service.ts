@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { CreateThemeDto } from './dto/create-theme.dto';
-import { UpdateThemeDto } from './dto/update-theme.dto';
+import { CreateThemeDto } from '../dtos/create-theme.dto';
+import { UpdateThemeDto } from '../dtos/update-theme.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ThemeEntity } from './entities/theme.entity';
+import { ThemeEntity } from '../entities/theme.entity';
 import { In, Repository } from 'typeorm';
 import { ThemesAttachmentsService } from './themes-attachments.service';
 import {
@@ -11,7 +11,7 @@ import {
   Paginated,
   PaginateQuery,
 } from 'nestjs-paginate';
-import { CreateFarmThemeDto } from './dto/create-farm-theme.dto';
+import { CreateFarmThemeDto } from '../dtos/create-farm-theme.dto';
 
 @Injectable()
 export class ThemesService {

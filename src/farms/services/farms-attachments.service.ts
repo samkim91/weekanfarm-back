@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { FarmAttachmentEntity } from './entities/farm-attachment.entity';
+import { FarmAttachmentEntity } from '../entities/farm-attachment.entity';
 import { In, IsNull, Not, Repository } from 'typeorm';
-import { StoragesService } from '../storages/storages.service';
-import { IMAGE_EXTENSIONS_REGEX } from '../utils/regex';
-import { FileType } from '../enums/file.type';
-import { FarmEntity } from './entities/farm.entity';
+import { StoragesService } from '../../storages/storages.service';
+import { IMAGE_EXTENSIONS_REGEX } from '../../utils/regex';
+import { FileType } from '../../enums/file.type';
+import { FarmEntity } from '../entities/farm.entity';
 
 @Injectable()
 export class FarmsAttachmentsService {

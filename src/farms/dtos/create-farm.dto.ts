@@ -9,7 +9,7 @@ import {
 import { Transform, Type } from 'class-transformer';
 import { EMAIL_REGEX } from '../../utils/regex';
 import { CreateFarmUrlDto } from './create-farm-url.dto';
-import { CreateFarmThemeDto } from '../../themes/dto/create-farm-theme.dto';
+import { CreateFarmThemeDto } from '../../themes/dtos/create-farm-theme.dto';
 import { CreateFarmOpeningHourDto } from './create-farm-opening-hour.dto';
 
 export class CreateFarmDto {

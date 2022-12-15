@@ -10,11 +10,11 @@ import {
   UseInterceptors,
   ValidationPipe,
 } from '@nestjs/common';
-import { FarmsService } from './farms.service';
+import { FarmsService } from './services/farms.service';
 import { FilesInterceptor } from '@nestjs/platform-express';
-import { CreateFarmDto } from './dto/create-farm.dto';
+import { CreateFarmDto } from './dtos/create-farm.dto';
 import { FarmEntity } from './entities/farm.entity';
-import { UpdateFarmDto } from './dto/update-farm.dto';
+import { UpdateFarmDto } from './dtos/update-farm.dto';
 import { Paginate, Paginated, PaginateQuery } from 'nestjs-paginate';
 
 @Controller('farms')

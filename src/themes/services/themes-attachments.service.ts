@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ThemeAttachmentEntity } from './entities/theme-attachment.entity';
+import { ThemeAttachmentEntity } from '../entities/theme-attachment.entity';
 import { Repository } from 'typeorm';
-import { StoragesService } from '../storages/storages.service';
-import { FileType } from '../enums/file.type';
-import { IMAGE_EXTENSIONS_REGEX } from '../utils/regex';
+import { StoragesService } from '../../storages/storages.service';
+import { FileType } from '../../enums/file.type';
+import { IMAGE_EXTENSIONS_REGEX } from '../../utils/regex';
 
 @Injectable()
 export class ThemesAttachmentsService {

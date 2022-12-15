@@ -1,18 +1,18 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { FarmEntity } from './entities/farm.entity';
+import { FarmEntity } from '../entities/farm.entity';
 import { Repository } from 'typeorm';
-import { CreateFarmDto } from './dto/create-farm.dto';
+import { CreateFarmDto } from '../dtos/create-farm.dto';
 import { FarmsAttachmentsService } from './farms-attachments.service';
-import { UpdateFarmDto } from './dto/update-farm.dto';
+import { UpdateFarmDto } from '../dtos/update-farm.dto';
 import {
   FilterOperator,
   paginate,
   Paginated,
   PaginateQuery,
 } from 'nestjs-paginate';
-import { ThemesService } from '../themes/themes.service';
-import { updateFarmEntity } from './entities/update-farm-entity';
+import { ThemesService } from '../../themes/services/themes.service';
+import { updateFarmEntity } from '../entities/update-farm-entity';
 import { FarmsUrlsService } from './farms-urls.service';
 import { FarmsOpeningHoursService } from './farms-opening-hours.service';
 

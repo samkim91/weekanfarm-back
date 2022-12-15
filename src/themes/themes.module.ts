@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
-import { ThemesService } from './themes.service';
+import { ThemesService } from './services/themes.service';
 import { ThemesController } from './themes.controller';
-import { ThemesAttachmentsService } from './themes-attachments.service';
+import { ThemesAttachmentsService } from './services/themes-attachments.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ThemeEntity } from './entities/theme.entity';
 import { ThemeAttachmentEntity } from './entities/theme-attachment.entity';

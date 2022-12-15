@@ -11,9 +11,9 @@ import {
   UseInterceptors,
   ValidationPipe,
 } from '@nestjs/common';
-import { ThemesService } from './themes.service';
-import { CreateThemeDto } from './dto/create-theme.dto';
-import { UpdateThemeDto } from './dto/update-theme.dto';
+import { ThemesService } from './services/themes.service';
+import { CreateThemeDto } from './dtos/create-theme.dto';
+import { UpdateThemeDto } from './dtos/update-theme.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ThemeEntity } from './entities/theme.entity';
 import { Paginate, Paginated, PaginateQuery } from 'nestjs-paginate';

@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { CreateFarmOpeningHourDto } from './dto/create-farm-opening-hour.dto';
+import { CreateFarmOpeningHourDto } from '../dtos/create-farm-opening-hour.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { FarmOpeningHourEntity } from './entities/farm-opening-hour.entity';
+import { FarmOpeningHourEntity } from '../entities/farm-opening-hour.entity';
 import { Repository } from 'typeorm';
-import { FarmEntity } from './entities/farm.entity';
+import { FarmEntity } from '../entities/farm.entity';
 
 @Injectable()
 export class FarmsOpeningHoursService {
