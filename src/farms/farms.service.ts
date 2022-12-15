@@ -13,6 +13,7 @@ import {
 } from 'nestjs-paginate';
 import { ThemesService } from '../themes/themes.service';
 import { updateFarmEntity } from './entities/update-farm-entity';
+import { FarmsUrlsService } from './farms-urls.service';
 
 @Injectable()
 export class FarmsService {
@@ -23,6 +24,7 @@ export class FarmsService {
     private readonly farmsRepository: Repository<FarmEntity>,
     private readonly farmsAttachmentsService: FarmsAttachmentsService,
     private readonly themesService: ThemesService,
+    private readonly farmsUrlsService: FarmsUrlsService,
   ) {}
 
   async create(
@@ -33,13 +35,12 @@ export class FarmsService {
 
     farmEntity.attachments = await this.farmsAttachmentsService.create(files);
 
-    if (createFarmDto.themes.length != 0) {
-      farmEntity.themes = await this.themesService.findAllByIds(
-        createFarmDto.themes.map((theme) => theme.id),
-      );
-    }
+    farmEntity.themes = await this.themesService.updateFarmThemes(
+      createFarmDto.themes,
+    );
 
-    // TODO: 2022/12/13 urls
+    farmEntity.urls = await this.farmsUrlsService.create(createFarmDto.urls);
+
     // TODO: 2022/12/13 opening-hours
     // TODO: 2022/12/13 pricings
 
@@ -101,13 +102,15 @@ export class FarmsService {
     );
     farmEntity.attachments.push.apply(newFarmAttachments);
 
-    if (updateFarmDto.themes && updateFarmDto.themes.length > 0) {
-      farmEntity.themes = await this.themesService.findAllByIds(
-        updateFarmDto.themes.map((theme) => theme.id),
-      );
-    }
+    farmEntity.themes = await this.themesService.updateFarmThemes(
+      updateFarmDto.themes,
+    );
 
-    // TODO: 2022/12/13 urls
+    farmEntity.urls = await this.farmsUrlsService.update(
+      farmEntity,
+      updateFarmDto.urls,
+    );
+
     // TODO: 2022/12/13 opening-hours
     // TODO: 2022/12/13 pricings
 

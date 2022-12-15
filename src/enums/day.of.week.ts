@@ -1,4 +1,4 @@
-const DayOfWeek = {
+export const DayOfWeek = {
   MONDAY: '월요일',
   TUESDAY: '화요일',
   WEDNESDAY: '수요일',

@@ -4,6 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { typeORMConfig } from './configs/typeorm.config';
 import { ThemesModule } from './themes/themes.module';
+import { FarmsUrlsService } from './farms/farms-urls.service';
 import * as process from 'process';
 
 @Module({

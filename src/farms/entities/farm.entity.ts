@@ -3,7 +3,7 @@ import { FarmAttachmentEntity } from './farm-attachment.entity';
 import { OpeningHourEntity } from '../../opening-hours/opening-hour.entity';
 import { PricingEntity } from '../../pricings/pricing.entity';
 import { CommonEntity } from '../../common/common-entity';
-import { FarmUrlEntity } from '../../farms-urls/farm-url.entity';
+import { FarmUrlEntity } from './farm-url.entity';
 import { ThemeEntity } from '../../themes/entities/theme.entity';
 
 @Entity({ name: 'farm' })

@@ -11,6 +11,7 @@ import {
   Paginated,
   PaginateQuery,
 } from 'nestjs-paginate';
+import { CreateFarmThemeDto } from './dto/create-farm-theme.dto';
 
 @Injectable()
 export class ThemesService {
@@ -44,14 +45,6 @@ export class ThemesService {
     });
   }
 
-  async findAllByIds(ids: number[]): Promise<ThemeEntity[]> {
-    return await this.themesRepository.find({
-      where: {
-        id: In(ids),
-      },
-    });
-  }
-
   async findOne(id: number): Promise<ThemeEntity> {
     return await this.themesRepository.findOneOrFail({
       where: { id: id },
@@ -81,6 +74,22 @@ export class ThemesService {
     if (themeEntity) {
       await this.themesAttachmentsService.remove(themeEntity.attachment.id);
       return await this.themesRepository.delete(id);
+    }
+  }
+
+  async updateFarmThemes(
+    createFarmThemeDtos: CreateFarmThemeDto[] | undefined,
+  ): Promise<ThemeEntity[]> {
+    if (Array.isArray(createFarmThemeDtos) && createFarmThemeDtos.length != 0) {
+      const newThemeIds = createFarmThemeDtos.map((themeDtos) => themeDtos.id);
+
+      return await this.themesRepository.find({
+        where: {
+          id: In(newThemeIds),
+        },
+      });
+    } else {
+      return Promise.all([]);
     }
   }
 }

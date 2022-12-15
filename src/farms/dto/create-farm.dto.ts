@@ -8,6 +8,8 @@ import {
 import { Transform, Type } from 'class-transformer';
 import { EMAIL_REGEX } from '../../utils/regex';
 import { ThemeEntity } from '../../themes/entities/theme.entity';
+import { CreateFarmUrlDto } from './create-farm-url.dto';
+import { CreateFarmThemeDto } from '../../themes/dto/create-farm-theme.dto';
 
 export class CreateFarmDto {
   @IsNotEmpty()
@@ -54,18 +56,21 @@ export class CreateFarmDto {
 
   @MaxLength(65535)
   adminNotes = '';
+
   @IsNotEmpty()
   @IsBoolean()
   @Transform(({ value }) => value === 'true')
   isActive: boolean;
 
   @IsArray()
-  @Type(() => ThemeEntity)
-  themes: ThemeEntity[];
+  @Type(() => CreateFarmThemeDto)
+  themes: CreateFarmThemeDto[];
+
+  @IsArray()
+  @Type(() => CreateFarmUrlDto)
+  urls: CreateFarmUrlDto[];
 
   // TODO: 2022/12/13 openingHours
 
-  // TODO: 2022/12/13 pricing
-
-  // TODO: 2022/12/13 urls
+  // TODO: 2022/12/13 pricings
 }

@@ -1,4 +1,4 @@
-const SnsType = {
+export const SnsType = {
   YOUTUBE: '유튜브',
   INSTAGRAM: '인스타그램',
   BLOG: '블로그',
