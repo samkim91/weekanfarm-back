@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToOne } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 import { FarmEntity } from './farm.entity';
 import { CommonEntity } from '../../common/common-entity';
 
@@ -10,9 +10,10 @@ export class FarmPricingEntity extends CommonEntity {
   @Column({ type: 'bigint' })
   cost: number;
 
-  @Column({ type: 'time' })
-  playTime: string;
+  @Column({ type: 'time', default: '00:00:00' })
+  playtime: string;
 
-  @ManyToOne(() => FarmEntity, (farm) => farm.pricing)
+  @ManyToOne(() => FarmEntity, (farm) => farm.pricings, { onDelete: 'CASCADE' })
+  @JoinColumn()
   farm: FarmEntity;
 }

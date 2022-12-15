@@ -1,5 +1,5 @@
 import { UpdateFarmDto } from '../dtos/update-farm.dto';
-import { FarmEntity } from './farm.entity';
+import { FarmEntity } from '../entities/farm.entity';
 
 export const updateFarmEntity = (
   farmEntity: FarmEntity,

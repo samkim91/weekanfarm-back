@@ -4,6 +4,7 @@ import {
   IsNotEmpty,
   Matches,
   MaxLength,
+  ValidateIf,
   ValidateNested,
 } from 'class-validator';
 import { Transform, Type } from 'class-transformer';
@@ -11,6 +12,7 @@ import { EMAIL_REGEX } from '../../utils/regex';
 import { CreateFarmUrlDto } from './create-farm-url.dto';
 import { CreateFarmThemeDto } from '../../themes/dtos/create-farm-theme.dto';
 import { CreateFarmOpeningHourDto } from './create-farm-opening-hour.dto';
+import { CreateFarmPricingDto } from './create-farm-pricing.dto';
 
 export class CreateFarmDto {
   @IsNotEmpty()
@@ -63,20 +65,18 @@ export class CreateFarmDto {
   @Transform(({ value }) => value === 'true')
   isActive: boolean;
 
-  @IsArray()
   @Type(() => CreateFarmThemeDto)
   themes: CreateFarmThemeDto[];
 
-  @IsArray()
   @Type(() => CreateFarmUrlDto)
   @ValidateNested()
   urls: CreateFarmUrlDto[];
 
-  // TODO: 2022/12/13 openingHours
-  @IsArray()
   @Type(() => CreateFarmOpeningHourDto)
   @ValidateNested()
   openingHours: CreateFarmOpeningHourDto[];
 
-  // TODO: 2022/12/13 pricings
+  @Type(() => CreateFarmPricingDto)
+  @ValidateNested()
+  pricings: CreateFarmPricingDto[];
 }

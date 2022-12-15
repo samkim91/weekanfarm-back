@@ -64,7 +64,7 @@ export class FarmEntity extends CommonEntity {
     cascade: true,
     eager: true,
   })
-  pricing: FarmPricingEntity[];
+  pricings: FarmPricingEntity[];
 
   @OneToMany(
     () => FarmAttachmentEntity,

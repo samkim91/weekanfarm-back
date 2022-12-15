@@ -12,9 +12,10 @@ import {
   PaginateQuery,
 } from 'nestjs-paginate';
 import { ThemesService } from '../../themes/services/themes.service';
-import { updateFarmEntity } from '../entities/update-farm-entity';
+import { updateFarmEntity } from '../converters/update-farm-entity';
 import { FarmsUrlsService } from './farms-urls.service';
 import { FarmsOpeningHoursService } from './farms-opening-hours.service';
+import { FarmsPricingsService } from './farms-pricings.service';
 
 @Injectable()
 export class FarmsService {
@@ -27,6 +28,7 @@ export class FarmsService {
     private readonly themesService: ThemesService,
     private readonly farmsUrlsService: FarmsUrlsService,
     private readonly farmsOpeningHoursService: FarmsOpeningHoursService,
+    private readonly farmsPricingsService: FarmsPricingsService,
   ) {}
 
   async create(
@@ -47,21 +49,23 @@ export class FarmsService {
       createFarmDto.openingHours,
     );
 
-    // TODO: 2022/12/13 pricings
+    farmEntity.pricings = await this.farmsPricingsService.create(
+      createFarmDto.pricings,
+    );
 
     return await this.farmsRepository.save(farmEntity);
   }
 
   async findAll(query: PaginateQuery): Promise<Paginated<FarmEntity>> {
     return paginate(query, this.farmsRepository, {
-      relations: ['themes', 'openingHours', 'pricing', 'attachments', 'urls'],
+      relations: ['themes', 'openingHours', 'pricings', 'attachments', 'urls'],
       sortableColumns: [
         'id',
         'name',
         'mainPhone',
         'isActive',
         'isReservationCancelable',
-        'pricing.cost',
+        'pricings.cost',
         'themes.code',
         'themes.name',
       ],
@@ -82,7 +86,7 @@ export class FarmsService {
         isActive: [FilterOperator.IN],
         'themes.name': [FilterOperator.ILIKE],
         'themes.code': [FilterOperator.ILIKE],
-        'pricing.cost': [FilterOperator.BTW],
+        'pricings.cost': [FilterOperator.BTW],
       },
     });
   }
@@ -121,7 +125,10 @@ export class FarmsService {
       updateFarmDto.openingHours,
     );
 
-    // TODO: 2022/12/13 pricings
+    farmEntity.pricings = await this.farmsPricingsService.update(
+      farmEntity,
+      updateFarmDto.pricings,
+    );
 
     return await this.farmsRepository.save(farmEntity);
   }

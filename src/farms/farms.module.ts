@@ -11,6 +11,8 @@ import { FarmsUrlsService } from './services/farms-urls.service';
 import { FarmUrlEntity } from './entities/farm-url.entity';
 import { FarmOpeningHourEntity } from './entities/farm-opening-hour.entity';
 import { FarmsOpeningHoursService } from './services/farms-opening-hours.service';
+import { FarmPricingEntity } from './entities/farm-pricing.entity';
+import { FarmsPricingsService } from './services/farms-pricings.service';
 
 @Module({
   imports: [
@@ -19,6 +21,7 @@ import { FarmsOpeningHoursService } from './services/farms-opening-hours.service
       FarmAttachmentEntity,
       FarmUrlEntity,
       FarmOpeningHourEntity,
+      FarmPricingEntity,
     ]),
     StoragesModule,
     ThemesModule,
@@ -29,6 +32,7 @@ import { FarmsOpeningHoursService } from './services/farms-opening-hours.service
     FarmsAttachmentsService,
     FarmsUrlsService,
     FarmsOpeningHoursService,
+    FarmsPricingsService,
   ],
 })
 export class FarmsModule {}

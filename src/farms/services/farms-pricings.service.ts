@@ -1,26 +1,45 @@
 import { Injectable } from '@nestjs/common';
 import { CreateFarmPricingDto } from '../dtos/create-farm-pricing.dto';
-import { UpdateFarmsPricingDto } from './dtos/update-farms-pricing.dtos';
+import { InjectRepository } from '@nestjs/typeorm';
+import { FarmPricingEntity } from '../entities/farm-pricing.entity';
+import { Repository } from 'typeorm';
+import { FarmEntity } from '../entities/farm.entity';
 
 @Injectable()
 export class FarmsPricingsService {
-  create(createFarmsPricingDto: CreateFarmPricingDto) {
-    return 'This action adds a new farmsPricing';
+  constructor(
+    @InjectRepository(FarmPricingEntity)
+    private readonly farmPricingRepository: Repository<FarmPricingEntity>,
+  ) {}
+
+  async create(
+    createFarmPricingDtos: CreateFarmPricingDto[],
+  ): Promise<FarmPricingEntity[]> {
+    if (
+      Array.isArray(createFarmPricingDtos) &&
+      createFarmPricingDtos.length != 0
+    ) {
+      return Promise.all(
+        this.farmPricingRepository.create(createFarmPricingDtos),
+      );
+    } else {
+      return Promise.all([]);
+    }
   }
 
-  findAll() {
-    return `This action returns all farmsPricings`;
-  }
+  async update(
+    farmEntity: FarmEntity,
+    updateFarmPricingDto: CreateFarmPricingDto[] | undefined,
+  ): Promise<FarmPricingEntity[]> {
+    if (
+      Array.isArray(updateFarmPricingDto) &&
+      updateFarmPricingDto.length != 0
+    ) {
+      await this.farmPricingRepository.delete({ farm: farmEntity });
 
-  findOne(id: number) {
-    return `This action returns a #${id} farmsPricing`;
-  }
-
-  update(id: number, updateFarmsPricingDto: UpdateFarmsPricingDto) {
-    return `This action updates a #${id} farmsPricing`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} farmsPricing`;
+      return await this.create(updateFarmPricingDto);
+    } else {
+      return Promise.all([]);
+    }
   }
 }
