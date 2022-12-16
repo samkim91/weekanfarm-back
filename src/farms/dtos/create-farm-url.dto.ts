@@ -1,5 +1,10 @@
 import { SnsType } from '../../enums/sns.type';
-import { IsNotEmpty, Matches, MaxLength } from 'class-validator';
+import {
+  IsNotEmpty,
+  Matches,
+  MaxLength,
+  ValidateNested,
+} from 'class-validator';
 import { URL_REGEX } from '../../utils/regex';
 
 export class CreateFarmUrlDto {
@@ -9,5 +14,19 @@ export class CreateFarmUrlDto {
   address: string;
 
   @IsNotEmpty()
+  @ValidateNested()
+  // @Type(() => SnsType, {
+  //   keepDiscriminatorProperty: true,
+  //   discriminator: {
+  //     property: 'kind',
+  //     subTypes: [
+  //       { value: SnsType.URL, name: SnsType.URL },
+  //       { value: SnsType.FACEBOOK, name: SnsType.FACEBOOK },
+  //       { value: SnsType.BLOG, name: SnsType.BLOG },
+  //       { value: SnsType.INSTAGRAM, name: SnsType.INSTAGRAM },
+  //       { value: SnsType.YOUTUBE, name: SnsType.YOUTUBE },
+  //     ],
+  //   },
+  // })
   type: SnsType;
 }
