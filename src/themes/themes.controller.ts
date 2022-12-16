@@ -2,14 +2,12 @@ import {
   Body,
   Controller,
   Delete,
-  FileTypeValidator,
   Get,
   Param,
   ParseFilePipe,
   Post,
   UploadedFile,
   UseInterceptors,
-  ValidationPipe,
 } from '@nestjs/common';
 import { ThemesService } from './services/themes.service';
 import { CreateThemeDto } from './dtos/create-theme.dto';
@@ -17,7 +15,6 @@ import { UpdateThemeDto } from './dtos/update-theme.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ThemeEntity } from './entities/theme.entity';
 import { Paginate, Paginated, PaginateQuery } from 'nestjs-paginate';
-import { IMAGE_EXTENSIONS_REGEX } from '../utils/regex';
 
 @Controller('themes')
 export class ThemesController {
@@ -26,13 +23,14 @@ export class ThemesController {
   @Post()
   @UseInterceptors(FileInterceptor('image'))
   create(
-    @Body(new ValidationPipe({ transform: true }))
+    @Body()
     createThemeDto: CreateThemeDto,
     @UploadedFile(
       new ParseFilePipe({
-        validators: [
-          new FileTypeValidator({ fileType: IMAGE_EXTENSIONS_REGEX }),
-        ],
+        fileIsRequired: true,
+        // validators: [
+        //   new FileTypeValidator({ fileType: IMAGE_EXTENSIONS_REGEX }),
+        // ],
       }),
     )
     image: Express.Multer.File,
@@ -54,14 +52,14 @@ export class ThemesController {
   @UseInterceptors(FileInterceptor('image'))
   update(
     @Param('id') id: string,
-    @Body(new ValidationPipe({ transform: true }))
+    @Body()
     updateThemeDto: UpdateThemeDto,
     @UploadedFile(
       new ParseFilePipe({
         fileIsRequired: false,
-        validators: [
-          new FileTypeValidator({ fileType: IMAGE_EXTENSIONS_REGEX }),
-        ],
+        // validators: [
+        //   new FileTypeValidator({ fileType: IMAGE_EXTENSIONS_REGEX }),
+        // ],
       }),
     )
     image: Express.Multer.File,
