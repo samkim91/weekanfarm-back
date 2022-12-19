@@ -1,6 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { corsConfig } from './configs/cors.config';
+import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -12,7 +13,18 @@ async function bootstrap() {
   // const httpAdapter = app.get(HttpAdapterHost);
   // app.useGlobalFilters(new AllExceptionsFilter(httpAdapter));
 
-  await app.listen(3000);
+  app.useGlobalPipes(
+    new ValidationPipe({
+      enableDebugMessages: true,
+      transform: true,
+      // skipUndefinedProperties: true,
+      // skipNullProperties: true,
+      // skipMissingProperties: true,
+    }),
+  );
+
+  const port = process.env.PORT || 3000;
+  await app.listen(port);
 }
 
 bootstrap();

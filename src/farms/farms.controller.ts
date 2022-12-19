@@ -8,7 +8,6 @@ import {
   Post,
   UploadedFiles,
   UseInterceptors,
-  ValidationPipe,
 } from '@nestjs/common';
 import { FarmsService } from './services/farms.service';
 import { FilesInterceptor } from '@nestjs/platform-express';
@@ -24,7 +23,7 @@ export class FarmsController {
   @Post()
   @UseInterceptors(FilesInterceptor('images'))
   create(
-    @Body(new ValidationPipe({ transform: true }))
+    @Body()
     createFarmDto: CreateFarmDto,
     @UploadedFiles(
       new ParseFilePipe({
@@ -50,7 +49,7 @@ export class FarmsController {
   @UseInterceptors(FilesInterceptor('images'))
   update(
     @Param('id') id: string,
-    @Body(new ValidationPipe({ transform: true }))
+    @Body()
     updateFarmDto: UpdateFarmDto,
     @UploadedFiles(
       new ParseFilePipe({
