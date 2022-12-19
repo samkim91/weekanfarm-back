@@ -19,7 +19,6 @@ export class StoragesService {
           Bucket: this.configService.get('AWS_S3_BUCKET_NAME')!,
           Body: file.buffer,
           Key: `${uuid()}-${file.originalname}`,
-          ACL: this.configService.get('AWS_S3_ACL'),
         })
         .promise();
 
@@ -31,6 +30,10 @@ export class StoragesService {
   }
 
   async deleteFile(key: string) {
+    return;
+    // TODO: 2022/12/19 s3 object 가 삭제가 안 되는 이슈가 있음. access denied 가 뜸.
+    // 버킷 권한이랑 iam 권한이랑 다 조치해봤는데, 역시나 안 됨. 추후 트래킹 필요.
+
     try {
       await s3
         .deleteObject({
