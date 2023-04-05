@@ -3,8 +3,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { FarmAttachmentEntity } from '../entities/farm-attachment.entity';
 import { In, IsNull, Not, Repository } from 'typeorm';
 import { StoragesService } from '../../storages/storages.service';
-import { IMAGE_EXTENSIONS_REGEX } from '../../utils/regex';
-import { FileType } from '../../enums/file.type';
 import { FarmEntity } from '../entities/farm.entity';
 
 @Injectable()
@@ -25,9 +23,7 @@ export class FarmsAttachmentsService {
             s3Key: uploadingResult.key,
             url: uploadingResult.location,
             fileName: file.originalname,
-            type: IMAGE_EXTENSIONS_REGEX.test(file.mimetype)
-              ? FileType.IMAGE
-              : FileType.FILE,
+            type: file.mimetype,
             size: file.size,
           });
         }),

@@ -1,6 +1,5 @@
 import { CommonEntity } from './common-entity';
 import { Column } from 'typeorm';
-import { FileType } from '../enums/file.type';
 
 export abstract class AttachmentEntity extends CommonEntity {
   @Column({ length: 64 })
@@ -13,7 +12,7 @@ export abstract class AttachmentEntity extends CommonEntity {
   fileName: string;
 
   @Column()
-  type: FileType;
+  type: string;
 
   @Column({ default: 0 })
   size: number;

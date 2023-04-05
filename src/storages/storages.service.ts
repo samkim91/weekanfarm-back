@@ -19,6 +19,7 @@ export class StoragesService {
           Bucket: this.configService.get('AWS_S3_BUCKET_NAME')!,
           Body: file.buffer,
           Key: `${uuid()}-${file.originalname}`,
+          ContentType: file.mimetype,
           ACL: this.configService.get('AWS_S3_ACL'),
         })
         .promise();
